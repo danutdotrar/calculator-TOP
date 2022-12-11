@@ -49,15 +49,14 @@ numberBtns.forEach(el=> el.addEventListener('click', displayNumber));
 function displayNumber(number) {
     // If the operator is not set yet, read first number
     if (operator === '') {
-        firstNum += number.target.innerText;
+        firstNum += Number(number.target.value);
         inputDisplay.value = firstNum;
         // Read second number
     } else {
-        secondNum += number.target.innerText;
+        secondNum += Number(number.target.value);
         inputDisplay.value = secondNum;
     }
 }
-
 
 
 // Operators ForEach
@@ -65,17 +64,20 @@ operators.forEach(op => op.addEventListener('click', evaluate));
 
 function evaluate(e) {
     // If the operator is not equal, then operator will be the current value
-    if (e.target.innerText !== '=') {
+    if (e.target.innerText !== '=' && secondNum == '') {
         operator = e.target.value;
+        
+    } else if (firstNum !== '' && secondNum !== '' && e.target.value !== '=') {
+        result = operate(operator, firstNum, secondNum);
+        operator = e.target.value;
+        secondNum = '';
+        firstNum = result;
 
-        console.log(firstNum);
-        console.log(operator);
-        inputDisplay.value = operator;
-        // If equal button is pressed
-    } else {
-        result = (operate(operator, firstNum, secondNum));
-        inputDisplay.value = result;
+    } else if (e.target.value == '=') {
+        result = operate(operator, firstNum, secondNum);
+        firstNum = result;
+        secondNum = '';
     }
+    inputDisplay.value = result;
 }
-
 
