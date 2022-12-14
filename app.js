@@ -2,6 +2,7 @@ let firstNum = '';
 let secondNum = '';
 let operator = '';
 let result = '';
+let clickDotOnce = true;
 
 const inputDisplay = document.querySelector('.display--screen');
 const numberBtns = document.querySelectorAll('.number');
@@ -83,6 +84,7 @@ function evaluate(e) {
         result = operate(operator, firstNum, secondNum);
         firstNum = result;
         secondNum = '';
+        
     }
     inputDisplay.value = Math.round(result * 100) / 100;
 }
@@ -102,5 +104,8 @@ function clear() {
 dotBtn.addEventListener('click', addDot);
 
 function addDot() {
-    console.log('add dot');
+    if (clickDotOnce) {
+        firstNum += '.';
+    }
+    clickDotOnce = false;
 }
