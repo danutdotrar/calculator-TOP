@@ -2,7 +2,7 @@ let firstNum = '';
 let secondNum = '';
 let operator = '';
 let result = '';
-let clickDotOnce = true;
+let dot = true;
 
 const inputDisplay = document.querySelector('.display--screen');
 const numberBtns = document.querySelectorAll('.number');
@@ -24,8 +24,8 @@ const divide = (a, b) => a / b;
 // Create a new function operate that takes an operator and 2 numbers 
 // and then calls one of the above functions on the numbers.
 function operate(operator, a, b) {
-    a = parseInt(a)
-    b = parseInt(b)
+    a = parseFloat(a)
+    b = parseFloat(b)
     
     switch(operator) {
         case '+':
@@ -79,6 +79,7 @@ function evaluate(e) {
         operator = e.target.value;
         secondNum = '';
         firstNum = result;
+        
 
     } else if (e.target.value == '=') {
         result = operate(operator, firstNum, secondNum);
@@ -104,8 +105,12 @@ function clear() {
 dotBtn.addEventListener('click', addDot);
 
 function addDot() {
-    if (clickDotOnce) {
+    if (dot) {
         firstNum += '.';
     }
-    clickDotOnce = false;
+
+    if (operator !== '') {
+        secondNum += '.'
+    }
+    dot = false;
 }
