@@ -7,6 +7,8 @@ const inputDisplay = document.querySelector('.display--screen');
 const numberBtns = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
 const equalBtn = document.querySelector('#equal-sign');
+const clearBtn = document.querySelector('.all-clear');
+const dotBtn = document.querySelector('.decimal-sign');
 
 
 // Functions
@@ -35,8 +37,11 @@ function operate(operator, a, b) {
             return multiply(a, b)
             break;
         case '÷':
-            if (b === 0) return "Can't divide by zero";
-            return divide(a, b)
+            if (b == 0) {
+                return `Can't divide`;
+            } else {
+                return divide(a, b);
+            }
             break;
         }
 }
@@ -55,6 +60,7 @@ function displayNumber(number) {
     } else {
         secondNum += Number(number.target.value);
         inputDisplay.value = secondNum;
+        if (secondNum == 0 && operator == '÷') inputDisplay.value = `Can't divide`
     }
 }
 
@@ -64,7 +70,7 @@ operators.forEach(op => op.addEventListener('click', evaluate));
 
 function evaluate(e) {
     // If the operator is not equal, then operator will be the current value
-    if (e.target.innerText !== '=' && secondNum == '') {
+    if (e.target.value !== '=' && secondNum == '') {
         operator = e.target.value;
         
     } else if (firstNum !== '' && secondNum !== '' && e.target.value !== '=') {
@@ -78,6 +84,23 @@ function evaluate(e) {
         firstNum = result;
         secondNum = '';
     }
-    inputDisplay.value = result;
+    inputDisplay.value = Math.round(result * 100) / 100;
 }
 
+// Clear all
+clearBtn.addEventListener('click', clear);
+
+function clear() {
+    firstNum = '';
+    secondNum = '';
+    result = '';
+    operator = '';
+    inputDisplay.value = '';
+}
+
+// Add dot button
+dotBtn.addEventListener('click', addDot);
+
+function addDot() {
+    console.log('add dot');
+}
