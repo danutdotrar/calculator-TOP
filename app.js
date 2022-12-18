@@ -2,7 +2,6 @@ let firstNum = '';
 let secondNum = '';
 let operator = '';
 let result = '';
-let dot = true;
 
 const inputDisplay = document.querySelector('.display--screen');
 const numberBtns = document.querySelectorAll('.number');
@@ -10,7 +9,7 @@ const operators = document.querySelectorAll('.operator');
 const equalBtn = document.querySelector('#equal-sign');
 const clearBtn = document.querySelector('.all-clear');
 const dotBtn = document.querySelector('.decimal-sign');
-
+const deleteBtn = document.querySelector('.delete');
 
 // Functions
 const add = (a, b) => a + b;
@@ -21,8 +20,7 @@ const multiply = (a, b) => a * b;
 
 const divide = (a, b) => a / b;
 
-// Create a new function operate that takes an operator and 2 numbers 
-// and then calls one of the above functions on the numbers.
+// Call one of the above functions on the numbers
 function operate(operator, a, b) {
     a = parseFloat(a)
     b = parseFloat(b)
@@ -45,30 +43,23 @@ function operate(operator, a, b) {
             }
             break;
         }
-}
-                
-// Populate display when click number
-numberBtns.forEach(el=> el.addEventListener('click', displayNumber));
+};
 
-// Create the functions that populate the display when you click the number buttons. 
-// You should be storing the ‘display value’ in a variable somewhere for use in the next step.
+// Populate the display when you click the number buttons. 
 function displayNumber(number) {
     // If the operator is not set yet, read first number
     if (operator === '') {
-        firstNum += Number(number.target.value);
+        firstNum += Number(parseFloat(number.target.value));
         inputDisplay.value = firstNum;
         // Read second number
     } else {
-        secondNum += Number(number.target.value);
+        secondNum += Number(parseFloat(number.target.value));
         inputDisplay.value = secondNum;
         if (secondNum == 0 && operator == '÷') inputDisplay.value = `Can't divide`
     }
-}
+};
 
-
-// Operators ForEach
-operators.forEach(op => op.addEventListener('click', evaluate));
-
+// Evaluate the inputs
 function evaluate(e) {
     // If the operator is not equal, then operator will be the current value
     if (e.target.value !== '=' && secondNum == '') {
@@ -80,7 +71,7 @@ function evaluate(e) {
         secondNum = '';
         firstNum = result;
         
-
+        
     } else if (e.target.value == '=') {
         result = operate(operator, firstNum, secondNum);
         firstNum = result;
@@ -88,29 +79,51 @@ function evaluate(e) {
         
     }
     inputDisplay.value = Math.round(result * 100) / 100;
-}
+};
 
 // Clear all
-clearBtn.addEventListener('click', clear);
-
 function clear() {
     firstNum = '';
     secondNum = '';
     result = '';
     operator = '';
     inputDisplay.value = '';
-}
+};
+
+// Add decimal
+function addDot() {
+    if (operator == '' && !inputDisplay.value.includes('.')) {
+        firstNum += '.';
+    }
+    
+    if (operator !== '' && !inputDisplay.value.includes('.')) {
+        secondNum += '.';
+    }
+};
+
+// Delete one element
+function deleteElement() {
+    inputDisplay.value = inputDisplay.value.toString().split('').join('').slice(0,-1);
+    if (secondNum == '')  {
+        firstNum = inputDisplay.value;
+    }   
+    
+    if (operator !== '' && firstNum !== '')  {
+        secondNum = inputDisplay.value;
+    }
+};
+
+// Populate display when click number
+numberBtns.forEach(el=> el.addEventListener('click', displayNumber));
+
+// ForEach operator evaluate
+operators.forEach(op => op.addEventListener('click', evaluate));
+
+// Clear all
+clearBtn.addEventListener('click', clear);
 
 // Add dot button
 dotBtn.addEventListener('click', addDot);
 
-function addDot() {
-    if (dot) {
-        firstNum += '.';
-    }
-
-    if (operator !== '') {
-        secondNum += '.'
-    }
-    dot = false;
-}
+// Add delete button
+deleteBtn.addEventListener('click', deleteElement);
