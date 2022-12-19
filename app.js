@@ -71,13 +71,12 @@ function evaluate(e) {
         secondNum = '';
         firstNum = result;
         
-        
     } else if (e.target.value == '=') {
         result = operate(operator, firstNum, secondNum);
         firstNum = result;
-        secondNum = '';
-        
+        secondNum = ''; 
     }
+
     inputDisplay.value = Math.round(result * 100) / 100;
 };
 
@@ -92,11 +91,11 @@ function clear() {
 
 // Add decimal
 function addDot() {
-    if (operator == '' && !inputDisplay.value.includes('.')) {
+    if (operator == '' && !firstNum.includes('.')) {
         firstNum += '.';
     }
     
-    if (operator !== '' && !inputDisplay.value.includes('.')) {
+    if (operator !== '' && !secondNum.includes('.')) {
         secondNum += '.';
     }
 };
@@ -105,11 +104,12 @@ function addDot() {
 function deleteElement() {
     inputDisplay.value = inputDisplay.value.toString().split('').join('').slice(0,-1);
     if (secondNum == '')  {
-        firstNum = inputDisplay.value;
-    }   
-    
-    if (operator !== '' && firstNum !== '')  {
-        secondNum = inputDisplay.value;
+        result = inputDisplay.value;
+        firstNum = result;
+
+    } else if (firstNum !== '' && operator !== '=')  {
+        result = inputDisplay.value;
+        secondNum = result;
     }
 };
 
